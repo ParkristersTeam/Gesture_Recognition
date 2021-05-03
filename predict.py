@@ -1,5 +1,6 @@
 print('Importing libraries: ', end="")
 
+##--------------- Подключаемые библиотеки ---------------##
 from tensorflow.python.keras.models import Sequential, load_model
 from tensorflow.python.keras.layers.core import Dense, Dropout, Activation, Flatten
 from tensorflow.python.keras.layers.convolutional import Conv3D, MaxPooling3D
@@ -24,7 +25,6 @@ import keyboard
 
 time.sleep(2)
 
-print('done')
 nb_classes = 27
 
 print('Building model: ', end="")
@@ -80,6 +80,7 @@ model.add(Dense(nb_classes, activation='softmax'))
 print('done')
 # model.add(LSTM(256))
 
+##--------------------------------- Набор жестов ---------------------------------##
 to_predict = []
 classes = ['Pushing Two Fingers Away',
  'Pushing Hand Away',
@@ -109,6 +110,7 @@ classes = ['Pushing Two Fingers Away',
  'Sliding Two Fingers Up',
  'Pulling Hand In']
 
+
 model.load_weights('main.h5')
 num_frames = 0
 cap = cv2.VideoCapture(0)
@@ -119,6 +121,7 @@ preds = []
 
 classe = ''
 
+##--------------------------------- Распознавание жестов ---------------------------------##
 while cap.isOpened():
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -188,6 +191,8 @@ while cap.isOpened():
         font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(frame, classe, (30, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0.5, 0.5),1,cv2.LINE_AA)
 
+
+    ##--------------------- Закрытие окон по нажатию Q ---------------------##
     cv2.imshow('Q', q)
     cv2.imshow('Hand Gesture Recognition',frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
