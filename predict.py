@@ -29,56 +29,39 @@ nb_classes = 27
 
 print('Building model: ', end="")
 model = Sequential()
-#`channels_last` corresponds to inputs with shape `(batch, spatial_dim1, spatial_dim2, spatial_dim3, channels)`
 strides = (1,1,1)
 kernel_size = (3, 3, 3)
 model.add(Conv3D(32, kernel_size, strides=strides, activation='relu', padding='same', input_shape=(32, 64, 96, 3)))
-#print(model.output_shape)
 model.add(BatchNormalization())
 model.add(MaxPooling3D(pool_size=(1, 2, 2)))
-#print(model.output_shape)
 
 model.add(Conv3D(64, kernel_size, strides=strides, activation='relu',padding='same'))
-#print(model.output_shape)
 model.add(BatchNormalization())
 model.add(MaxPooling3D(pool_size=(1, 2, 2)))
-#print(model.output_shape)
 
 model.add(Conv3D(128, kernel_size, strides=strides, activation='relu',padding='same'))
-#print(model.output_shape)
 model.add(BatchNormalization())
 model.add(MaxPooling3D(pool_size=(1, 2, 2)))
-#print(model.output_shape)
 
 model.add(Conv3D(256, kernel_size, strides=strides, activation='relu',padding='same'))
-#print(model.output_shape)
 model.add(BatchNormalization())
 
 model.add(Conv3D(256, kernel_size, strides=strides, activation='relu',padding='same'))
-#print(model.output_shape)
 model.add(BatchNormalization())
 
 model.add(Conv3D(256, kernel_size, strides=strides, activation='relu',padding='same'))
-#print(model.output_shape)
 model.add(BatchNormalization())
 
 model.add(MaxPooling3D(pool_size=(1,8,12)))
-#print(model.output_shape)
 
 model.add(Reshape((32, 256)))
-#print(model.output_shape)
 model.add(LSTM(256, return_sequences=True))
-#print(model.output_shape)
 model.add(LSTM(256))
-#print(model.output_shape)
 
 model.add(Dense(256, activation='relu'))
-#print(model.output_shape)
 
 model.add(Dense(nb_classes, activation='softmax'))
-#print(model.output_shape)
 print('done')
-# model.add(LSTM(256))
 
 ##--------------------------------- Набор жестов ---------------------------------##
 to_predict = []
