@@ -1,6 +1,5 @@
 print('Importing libraries: ', end="")
 
-##--------------- Подключаемые библиотеки ---------------##
 from tensorflow.python.keras.models import Sequential, load_model
 from tensorflow.python.keras.layers.core import Dense, Dropout, Activation, Flatten
 from tensorflow.python.keras.layers.convolutional import Conv3D, MaxPooling3D
@@ -21,49 +20,66 @@ import pyautogui as pag
 import win32gui as win
 import re
 import time
-import keyboard
+import vlc
 
 time.sleep(2)
 
+print('done')
 nb_classes = 27
 
 print('Building model: ', end="")
 model = Sequential()
+#`channels_last` corresponds to inputs with shape `(batch, spatial_dim1, spatial_dim2, spatial_dim3, channels)`
 strides = (1,1,1)
 kernel_size = (3, 3, 3)
 model.add(Conv3D(32, kernel_size, strides=strides, activation='relu', padding='same', input_shape=(32, 64, 96, 3)))
+#print(model.output_shape)
 model.add(BatchNormalization())
 model.add(MaxPooling3D(pool_size=(1, 2, 2)))
+#print(model.output_shape)
 
 model.add(Conv3D(64, kernel_size, strides=strides, activation='relu',padding='same'))
+#print(model.output_shape)
 model.add(BatchNormalization())
 model.add(MaxPooling3D(pool_size=(1, 2, 2)))
+#print(model.output_shape)
 
 model.add(Conv3D(128, kernel_size, strides=strides, activation='relu',padding='same'))
+#print(model.output_shape)
 model.add(BatchNormalization())
 model.add(MaxPooling3D(pool_size=(1, 2, 2)))
+#print(model.output_shape)
 
 model.add(Conv3D(256, kernel_size, strides=strides, activation='relu',padding='same'))
+#print(model.output_shape)
 model.add(BatchNormalization())
 
 model.add(Conv3D(256, kernel_size, strides=strides, activation='relu',padding='same'))
+#print(model.output_shape)
 model.add(BatchNormalization())
 
 model.add(Conv3D(256, kernel_size, strides=strides, activation='relu',padding='same'))
+#print(model.output_shape)
 model.add(BatchNormalization())
 
 model.add(MaxPooling3D(pool_size=(1,8,12)))
+#print(model.output_shape)
 
 model.add(Reshape((32, 256)))
+#print(model.output_shape)
 model.add(LSTM(256, return_sequences=True))
+#print(model.output_shape)
 model.add(LSTM(256))
+#print(model.output_shape)
 
 model.add(Dense(256, activation='relu'))
+#print(model.output_shape)
 
 model.add(Dense(nb_classes, activation='softmax'))
+#print(model.output_shape)
 print('done')
+# model.add(LSTM(256))
 
-##--------------------------------- Набор жестов ---------------------------------##
 to_predict = []
 classes = ['Pushing Two Fingers Away',
  'Pushing Hand Away',
@@ -93,7 +109,6 @@ classes = ['Pushing Two Fingers Away',
  'Sliding Two Fingers Up',
  'Pulling Hand In']
 
-
 model.load_weights('main.h5')
 num_frames = 0
 cap = cv2.VideoCapture(0)
@@ -103,8 +118,8 @@ cap.set(6, 10)
 preds = []
 
 classe = ''
+import time 
 
-##--------------------------------- Распознавание жестов ---------------------------------##
 while cap.isOpened():
     # Capture frame-by-frame
     ret, frame = cap.read()
@@ -134,22 +149,32 @@ while cap.isOpened():
 
                 ##hdwd = win.GetWindowText(win.GetForegroundWindow())
                 ##pattern = r"(Microsoft PowerPoint)+"
+                    #if classe == 'Thumbs Down':
+                    #    pag.hotkey('alt', 'f4')
 
-                if "PowerPoint" in win.GetWindowText(win.GetForegroundWindow()):
-                    if True:
-                        if classe == 'Thumbs Down':
-                            pag.hotkey('alt', 'f4')
+                    #if classe == 'Thumbs Up':
+                    #   pag.hotkey('altleft', 'tab')
 
-                        #if classe == 'Pulling Hand In':
+                    #if classe == 'Zooming Out With Full Hand':
+                    #    pag.hotkey('fn', 'f5')
+
+                    if "PowerPoint" in win.GetWindowText(win.GetForegroundWindow()):
+                        print("-----------------------PowerPoint-----------------------")
+                        # if classe == 'Pulling Hand In':
                         #    pag.hotkey('alt', 'tab')
+                        if classe == 'Thumbs Down':
+                            pag.press('esc')
 
-                        if classe == 'Swiping Left': # left == right потому что изображение с камеры отзеркалено
-                            pag.press('right')
+                        if classe == 'Thumbs Up':
+                            pag.press('f5')
 
-                        if classe == 'Swiping Right': # left == right потому что изображение с камеры отзеркалено
+                        if classe == 'Swiping Left':  # left == right потому что изображение с камеры отзеркалено
                             pag.press('left')
 
-                        #if classe == 'Swiping Up':
+                        if classe == 'Swiping Right':  # left == right потому что изображение с камеры отзеркалено
+                            pag.press('right')
+
+                        #if classe == 'Thumb Up':
                         #    pag.press('f5')
 
                         if classe == 'Sliding Two Fingers Down':
@@ -160,11 +185,52 @@ while cap.isOpened():
 
                         if classe == 'Swiping Down':
                             pag.press('down')
-                else:
-                    pag.hotkey('win', '1')
 
-                if keyboard.is_pressed('q'):
-                    break
+                    if "VLC" in win.GetWindowText(win.GetForegroundWindow()):
+                        print("-----------------------VLC-----------------------")
+                        if classe == 'Stop Sign':
+                            pag.press('space')
+
+                        if classe == 'Swiping Left':
+                            pag.hotkey('ctrl', 'right')
+
+                        if classe == 'Swiping Right':
+                            pag.hotkey('ctrl', 'left')
+
+                        if classe == 'Swiping Up':
+                            pag.hotkey('ctrl', 'up')
+
+                        if classe == 'Swiping Down':
+                            pag.hotkey('ctrl', 'down')
+
+                        #if classe == 'Zooming Out With Full Hand':
+                        #    player = vlc.MediaPlayer()
+                        #    player.audio_set_mute(audio_get_mute())
+
+                    if "Teams" in win.GetWindowText(win.GetForegroundWindow()):
+
+                        if classe == 'Zooming In With Full Hand':
+                            pag.hotkey('ctrl', 'shift', 'm')
+
+                        if classe == 'Stop sign':
+                            pag.hotkey('ctrl', 'shift', 'd')
+
+                    if "Камера" or "Camera" in win.GetWindowText(win.GetForegroundWindow()):
+
+                        if classe == 'Stop sign':
+                            pag.press('space')
+
+                    if "Zoom" in win.GetWindowText(win.GetForegroundWindow()):
+
+                        if classe == 'Zooming In With Full Hand':
+                            pag.hotkey('ctrl', 'shift', 'm')
+
+                        if classe == 'Stop sign':
+                            pag.hotkey('ctrl', 'shift', 'd')
+
+                        if classe == 'Swiping Down':
+                            pag.hotkey('alt', 'a')
+
 
             if len(preds) >= 10:
                 preds = preds[8:9]
@@ -174,8 +240,6 @@ while cap.isOpened():
         font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(frame, classe, (30, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0.5, 0.5),1,cv2.LINE_AA)
 
-
-    ##--------------------- Закрытие окон по нажатию Q ---------------------##
     cv2.imshow('Q', q)
     cv2.imshow('Hand Gesture Recognition',frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
