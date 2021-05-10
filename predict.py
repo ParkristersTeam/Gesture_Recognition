@@ -128,8 +128,17 @@ while cap.isOpened():
                 with open('gesture.pkl', 'wb') as f:
                     pickle.dump(np.argmax(predict), f)
 
+
+
                     if classe == 'Drumming Fingers':
                         pag.hotkey('alt', 'f4')
+
+                    if classe == 'Zooming Out With Full Hand':
+                        pag.hotkey('win', 'd')
+
+                    if classe == 'Zooming In With Full Hand':
+                        pag.hotkey('win', 'd')
+
 
                     if "PowerPoint" in win.GetWindowText(win.GetForegroundWindow()):
                         print("-----------------------PowerPoint-----------------------")
@@ -177,27 +186,21 @@ while cap.isOpened():
                         if classe == 'Swiping Down':
                             pag.hotkey('ctrl', 'down')
 
-
                     if "Teams" in win.GetWindowText(win.GetForegroundWindow()):
                         flag = True
 
-                        if classe == 'Zooming In With Full Hand':
+                        if classe == 'Thumb Up':
                             pag.hotkey('ctrl', 'shift', 'm')
 
-                        if classe == 'Stop sign':
-                            pag.hotkey('ctrl', 'shift', 'd')
 
 
                     if "Zoom" in win.GetWindowText(win.GetForegroundWindow()):
                         flag = True
 
-                        if classe == 'Zooming In With Full Hand':
+                        if classe == 'Thumb Up':
                             pag.hotkey('ctrl', 'shift', 'm')
 
-                        if classe == 'Stop sign':
-                            pag.hotkey('ctrl', 'shift', 'd')
-
-                        if classe == 'Swiping Down':
+                        if classe == 'Thumb Down':
                             pag.hotkey('alt', 'a')
 
 
