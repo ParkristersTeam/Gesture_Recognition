@@ -133,11 +133,6 @@ while cap.isOpened():
                     if classe == 'Drumming Fingers':
                         pag.hotkey('alt', 'f4')
 
-                    if classe == 'Zooming Out With Full Hand':
-                        pag.hotkey('win', 'd')
-
-                    if classe == 'Zooming In With Full Hand':
-                        pag.hotkey('win', 'd')
 
 
                     if "PowerPoint" in win.GetWindowText(win.GetForegroundWindow()):
