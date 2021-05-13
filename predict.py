@@ -108,7 +108,12 @@ while cap.isOpened():
 
     frame_cp = cv2.resize(frame, (96, 64))
 
-    q = cv2.imread('quite.png')
+    qo = cv2.imread('other.png')
+    qp = cv2.imread('power.png')
+    qt = cv2.imread('teams.png')
+    qv = cv2.imread('vlc.png')
+    qz = cv2.imread('zoom.png')
+
     to_predict.append(frame_cp)
     to_predict.append(frame_cp)
 
@@ -122,14 +127,18 @@ while cap.isOpened():
         predict = model.predict(np.array(frame_to_predict))
         classe = classes[np.argmax(predict)]
         if np.argmax(predict) not in [2]:
-            if np.amax(predict) > 0.80:
+            if np.amax(predict) > 0.65:
                 print('Class = ', classe, 'Precision = ', np.amax(predict) * 100, '%')
                 preds.append(np.argmax(predict))
                 with open('gesture.pkl', 'wb') as f:
                     pickle.dump(np.argmax(predict), f)
 
+
+
                     if classe == 'Drumming Fingers':
                         pag.hotkey('alt', 'f4')
+
+
 
                     if "PowerPoint" in win.GetWindowText(win.GetForegroundWindow()):
                         print("-----------------------PowerPoint-----------------------")
@@ -141,10 +150,10 @@ while cap.isOpened():
                         if classe == 'Thumb Up':
                             pag.press('f5')
 
-                        if classe == 'Swiping Left':
+                        if classe == 'Swiping Left':  # left == right потому что изображение с камеры отзеркалено
                             pag.press('left')
 
-                        if classe == 'Swiping Right':
+                        if classe == 'Swiping Right':  # left == right потому что изображение с камеры отзеркалено
                             pag.press('right')
 
                         if classe == 'Sliding Two Fingers Down':
@@ -177,33 +186,21 @@ while cap.isOpened():
                         if classe == 'Swiping Down':
                             pag.hotkey('ctrl', 'down')
 
-                        if classe == 'Sliding Two Fingers Down':
-                            pag.hotkey('ctrl', 'down')
-
-                        if classe == 'Sliding Two Fingers Up':
-                            pag.hotkey('ctrl', 'up')
-
-
                     if "Teams" in win.GetWindowText(win.GetForegroundWindow()):
                         flag = True
 
-                        if classe == 'Zooming In With Full Hand':
+                        if classe == 'Thumb Up':
                             pag.hotkey('ctrl', 'shift', 'm')
 
-                        if classe == 'Stop sign':
-                            pag.hotkey('ctrl', 'shift', 'd')
 
 
                     if "Zoom" in win.GetWindowText(win.GetForegroundWindow()):
                         flag = True
 
-                        if classe == 'Zooming In With Full Hand':
+                        if classe == 'Thumb Up':
                             pag.hotkey('ctrl', 'shift', 'm')
 
-                        if classe == 'Stop sign':
-                            pag.hotkey('ctrl', 'shift', 'd')
-
-                        if classe == 'Swiping Down':
+                        if classe == 'Thumb Down':
                             pag.hotkey('alt', 'a')
 
 
@@ -215,7 +212,43 @@ while cap.isOpened():
         font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(frame, classe, (30, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0.5, 0.5), 1, cv2.LINE_AA)
 
-    cv2.imshow('Q', q)
+
+
+    if "PowerPoint" in win.GetWindowText(win.GetForegroundWindow()):
+        cv2.destroyWindow('VLC')
+        cv2.destroyWindow('Teams')
+        cv2.destroyWindow('Zoom')
+        cv2.destroyWindow('Exit')
+        cv2.imshow('PowerPoint', qp)
+
+    elif "VLC" in win.GetWindowText(win.GetForegroundWindow()):
+        cv2.destroyWindow('PowerPoint')
+        cv2.destroyWindow('Teams')
+        cv2.destroyWindow('Zoom')
+        cv2.destroyWindow('Exit')
+        cv2.imshow('VLC', qv)
+
+    elif "Teams" in win.GetWindowText(win.GetForegroundWindow()):
+        cv2.destroyWindow('VLC')
+        cv2.destroyWindow('PowerPoint')
+        cv2.destroyWindow('Zoom')
+        cv2.destroyWindow('Exit')
+        cv2.imshow('Teams', qt)
+
+    elif "Zoom" in win.GetWindowText(win.GetForegroundWindow()):
+        cv2.destroyWindow('VLC')
+        cv2.destroyWindow('Teams')
+        cv2.destroyWindow('PowerPoint')
+        cv2.destroyWindow('Exit')
+        cv2.imshow('Zoom', qz)
+
+    else:
+        cv2.destroyWindow('VLC')
+        cv2.destroyWindow('Teams')
+        cv2.destroyWindow('Zoom')
+        cv2.destroyWindow('PowerPoint')
+        cv2.imshow('Exit', qo)
+
     cv2.imshow('Hand Gesture Recognition', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
