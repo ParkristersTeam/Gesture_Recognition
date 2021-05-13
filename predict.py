@@ -122,18 +122,14 @@ while cap.isOpened():
         predict = model.predict(np.array(frame_to_predict))
         classe = classes[np.argmax(predict)]
         if np.argmax(predict) not in [2]:
-            if np.amax(predict) > 0.65:
+            if np.amax(predict) > 0.80:
                 print('Class = ', classe, 'Precision = ', np.amax(predict) * 100, '%')
                 preds.append(np.argmax(predict))
                 with open('gesture.pkl', 'wb') as f:
                     pickle.dump(np.argmax(predict), f)
 
-
-
                     if classe == 'Drumming Fingers':
                         pag.hotkey('alt', 'f4')
-
-
 
                     if "PowerPoint" in win.GetWindowText(win.GetForegroundWindow()):
                         print("-----------------------PowerPoint-----------------------")
@@ -145,10 +141,10 @@ while cap.isOpened():
                         if classe == 'Thumb Up':
                             pag.press('f5')
 
-                        if classe == 'Swiping Left':  # left == right потому что изображение с камеры отзеркалено
+                        if classe == 'Swiping Left':
                             pag.press('left')
 
-                        if classe == 'Swiping Right':  # left == right потому что изображение с камеры отзеркалено
+                        if classe == 'Swiping Right':
                             pag.press('right')
 
                         if classe == 'Sliding Two Fingers Down':
@@ -181,21 +177,33 @@ while cap.isOpened():
                         if classe == 'Swiping Down':
                             pag.hotkey('ctrl', 'down')
 
+                        if classe == 'Sliding Two Fingers Down':
+                            pag.hotkey('ctrl', 'down')
+
+                        if classe == 'Sliding Two Fingers Up':
+                            pag.hotkey('ctrl', 'up')
+
+
                     if "Teams" in win.GetWindowText(win.GetForegroundWindow()):
                         flag = True
 
-                        if classe == 'Thumb Up':
+                        if classe == 'Zooming In With Full Hand':
                             pag.hotkey('ctrl', 'shift', 'm')
 
+                        if classe == 'Stop sign':
+                            pag.hotkey('ctrl', 'shift', 'd')
 
 
                     if "Zoom" in win.GetWindowText(win.GetForegroundWindow()):
                         flag = True
 
-                        if classe == 'Thumb Up':
+                        if classe == 'Zooming In With Full Hand':
                             pag.hotkey('ctrl', 'shift', 'm')
 
-                        if classe == 'Thumb Down':
+                        if classe == 'Stop sign':
+                            pag.hotkey('ctrl', 'shift', 'd')
+
+                        if classe == 'Swiping Down':
                             pag.hotkey('alt', 'a')
 
 
